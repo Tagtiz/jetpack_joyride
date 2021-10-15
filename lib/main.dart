@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jetpack_joyride/mainMenu.dart';
 import 'homepage.dart';
 
 void main() {
@@ -17,10 +18,10 @@ class MyApp extends StatelessWidget {
     ]);
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
+      theme: ThemeData( 
         primarySwatch: Colors.blue,
       ),
-      home: Homepage(),
+      home: MainMenu(),
     );
   }
 }
