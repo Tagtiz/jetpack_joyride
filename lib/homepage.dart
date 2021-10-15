@@ -16,6 +16,7 @@ class _HomepageState extends State<Homepage> {
   double height = 0;
   double time = 0;
   double gravity = -4.9;
+  // double gravity = -0.1;
   double velocity = 10;
 
   bool gamestarted = false;
@@ -53,21 +54,28 @@ class _HomepageState extends State<Homepage> {
           body: Column(
             children: [
               Expanded(
-                  flex: 15,
-                  child: Container(
-                    color: Colors.blue,
-                    child: Center(
-                        child: Stack(
+                flex: 15,
+                child: Container(
+                  color: Colors.blue,
+                  child: Center(
+                    child: Stack(
                       children: [
                         Container(
-                          alignment: Alignment(100, 50),
+                          alignment: Alignment(-10, -8),
                           height: 50,
                           width: 50,
                           color: Colors.black,
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            color: Colors.purple,
+                          ),
                         )
                       ],
-                    )),
-                  )),
+                    ),
+                  ),
+                ),
+              ),
               Expanded(
                 flex: 3,
                 child: Container(
