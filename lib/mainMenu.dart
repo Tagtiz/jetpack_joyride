@@ -7,6 +7,10 @@ class MainMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("lib/assets/images/main_menu.jpg"),
+              fit: BoxFit.cover)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
