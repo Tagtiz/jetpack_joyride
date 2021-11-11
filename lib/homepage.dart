@@ -27,19 +27,18 @@ class _HomepageState extends State<Homepage> {
   int startYCoin = 0;
   int halfYCoin = 0;
   List<double> coinYLoc = [0.0, 0.0, 0.0, 0.0, 0.0];
-
   void setCoinPath(x) {
     switch (x) {
       case 0:
         {
           //upper upper
-          coinYLoc[0] = 1;
+          coinYLoc[0] = -1;
           break;
         }
       case 1:
         {
           //upper lower
-          coinYLoc[0] = 0.75;
+          coinYLoc[0] = -0.5;
           break;
         }
       case 2:
@@ -51,7 +50,7 @@ class _HomepageState extends State<Homepage> {
       case 3:
         {
           //lower lower
-          coinYLoc[0] = 0.25;
+          coinYLoc[0] = 1;
           break;
         }
     }
@@ -92,12 +91,14 @@ class _HomepageState extends State<Homepage> {
   }
 
   void jump() {
+    // if(isJump){
     setState(() {
       time = 0;
       initialPos = gamebirdY;
     });
     print("jump");
     print(gamebirdY);
+    // }
   }
 
   @override
@@ -106,9 +107,11 @@ class _HomepageState extends State<Homepage> {
       onTap: gamestarted ? jump : startGame,
       // onTap: gamestarted ? null : startGame,
       // onTapDown: (TapDownDetails details) {
+      //   print("true");
       //   isJump = true;
       // },
       // onTapUp: (TapUpDetails details) {
+      //   print("false");
       //   isJump = false;
       // },
       child: Container(
@@ -154,7 +157,7 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                         Container(
-                          alignment: Alignment(0, coinYLoc[0]),
+                          alignment: Alignment(bgX / 200 +1.2, coinYLoc[0]),
                           child: Container(
                             width: 50,
                             height: 50,
@@ -162,7 +165,7 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                         Container(
-                          alignment: Alignment(0.2, coinYLoc[1]),
+                          alignment: Alignment(bgX / 200 +1.2 + 0.2, coinYLoc[1]),
                           child: Container(
                             width: 50,
                             height: 50,
@@ -170,7 +173,7 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                         Container(
-                          alignment: Alignment(0.4, coinYLoc[2]),
+                          alignment: Alignment(bgX / 200 +1.2 + 0.4, coinYLoc[2]),
                           child: Container(
                             width: 50,
                             height: 50,
@@ -178,7 +181,7 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                         Container(
-                          alignment: Alignment(0.6, coinYLoc[3]),
+                          alignment: Alignment(bgX / 200 +1.2 + 0.6, coinYLoc[3]),
                           child: Container(
                             width: 50,
                             height: 50,
@@ -186,7 +189,7 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                         Container(
-                          alignment: Alignment(0.8, coinYLoc[4]),
+                          alignment: Alignment(bgX / 200 +1.2 + 0.8, coinYLoc[4]),
                           child: Container(
                             width: 50,
                             height: 50,
