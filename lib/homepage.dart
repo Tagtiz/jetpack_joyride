@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,48 @@ class _HomepageState extends State<Homepage> {
   double velocity = 5;
   double bgX = 0;
   bool isJump = false;
-
+  int randCoin = 0;
+  var randomizer = new Random();
   bool gamestarted = false;
+  int startYCoin = 0;
+  int halfYCoin = 0;
+  List<double> coinYLoc = [0.0, 0.0, 0.0, 0.0, 0.0];
+
+  void setCoinPath(x) {
+    switch (x) {
+      case 0:
+        {
+          //upper upper
+          coinYLoc[0] = 1;
+          break;
+        }
+      case 1:
+        {
+          //upper lower
+          coinYLoc[0] = 0.75;
+          break;
+        }
+      case 2:
+        {
+          //lower upper
+          coinYLoc[0] = 0.5;
+          break;
+        }
+      case 3:
+        {
+          //lower lower
+          coinYLoc[0] = 0.25;
+          break;
+        }
+    }
+    for (int i = 1; i <= 4; i++) {
+      coinYLoc[i] = coinYLoc[i - 1] + 0.15;
+    }
+  }
+
   void startGame() {
+    randCoin = randomizer.nextInt(5);
+    setCoinPath(randCoin);
     initialPos = gamebirdY;
     gamestarted = true;
     Timer.periodic(Duration(milliseconds: 50), (timer) {
@@ -79,9 +119,9 @@ class _HomepageState extends State<Homepage> {
                 flex: 15,
                 child: Container(
                   // decoration: BoxDecoration(
-                      // image: DecorationImage(
-                      //     image: AssetImage("lib/assets/background.png"),
-                      //     fit: BoxFit.cover)),
+                  // image: DecorationImage(
+                  //     image: AssetImage("lib/assets/background.png"),
+                  //     fit: BoxFit.cover)),
                   // color: Colors.blue,
                   child: Center(
                     child: Stack(
@@ -109,9 +149,50 @@ class _HomepageState extends State<Homepage> {
                           child: Container(
                             width: 100,
                             height: 100,
-                            color: Colors.purple,
+                            child: Image.asset("lib/assets/flying.png"),
+                            // color: Colors.purple,
                           ),
-                        )
+                        ),
+                        Container(
+                          alignment: Alignment(0, coinYLoc[0]),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            color: Colors.yellow,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment(0.2, coinYLoc[1]),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            color: Colors.yellow,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment(0.4, coinYLoc[2]),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            color: Colors.yellow,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment(0.6, coinYLoc[3]),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            color: Colors.yellow,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment(0.8, coinYLoc[4]),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            color: Colors.yellow,
+                          ),
+                        ),
                       ],
                     ),
                   ),
