@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  int score = 0;
   double gamebirdY = 0;
   double initialPos = 0;
   double height = 0;
@@ -93,8 +95,11 @@ class _HomepageState extends State<Homepage> {
         if (bgX <= -1050) {
           bgX = 0;
           setCoinPath(randomizer.nextInt(5));
-          for (var i in coinVis) {
-            i = true;
+          // for (var i in coinVis) {
+          //   i = true;
+          // }
+          for (var i = 0; i < 5; i++) {
+            coinVis[i] = true;
           }
         } else {
           bgX -= 5;
@@ -109,10 +114,14 @@ class _HomepageState extends State<Homepage> {
         gamebirdY = initialPos - height;
         for (int i = 0; i < 5; i++) {
           if (collision(i)) {
-            coinVis[i] = false;
+            if (coinVis[i]) {
+              coinVis[i] = false;
+              score += 1;
+            }
           }
         }
       });
+      print(gamebirdY);
       // if (gamebirdY < -5 || gamebirdY > 10) {
       // timer.cancel();
       //   print("cancelled");
@@ -122,13 +131,18 @@ class _HomepageState extends State<Homepage> {
   }
 
   bool collision(int c) {
-    double cx = bgX / 200 + 1.2;
+    double cx = (((bgX / 200) + 1.2) + 1).abs();
     double cy = (gamebirdY - coinYLoc[c]).abs();
-    if (sqrt(pow(cx, 2) + pow(cy, 2)) < 0.1) {
+    if (sqrt(pow(cx / 3, 2) + pow(cy, 2)) < 0.2) {
       print('oh no!');
+      // dev.log("OHNOOOOOO");
+      // print(sqrt(pow(cx, 2) + pow(cy, 2)));
+      print(cx.toString() + " " + cy.toString());
       return true;
     } else {
       print('oh yes');
+      // print(sqrt(pow(cx, 2) + pow(cy, 2)));
+      print(cx.toString() + " " + cy.toString());
       return false;
     }
   }
@@ -245,16 +259,18 @@ class _HomepageState extends State<Homepage> {
                               ),
                             )),
                         Container(
-                            alignment: Alignment(
-                                bgX / 200 + 1.2 + coinXOffset[4], coinYLoc[4]),
-                            child: Visibility(
-                              visible: coinVis[4],
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                color: Colors.yellow,
-                              ),
-                            )),
+                          alignment: Alignment(
+                              bgX / 200 + 1.2 + coinXOffset[4], coinYLoc[4]),
+                          child: Visibility(
+                            visible: coinVis[4],
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              color: Colors.yellow,
+                            ),
+                          ),
+                        ),
+                        Text(score.toString())
                       ],
                     ),
                   ),
