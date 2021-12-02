@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -81,6 +85,33 @@ class _HomepageState extends State<Homepage> {
         coinYLoc[i] = coinYLoc[i - 1] + 0.15;
       }
     }
+  }
+
+  void setHighScore(int a) async {
+    final prefs = await SharedPreferences.getInstance();
+    if ((prefs.getInt('highscore') ?? 0) < a) {
+      await prefs.setInt('highscore', a);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor);
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(myInterceptor);
+    super.dispose();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    setHighScore(score);
+    // Navigator.pop(context);
+    Navigator.popAndPushNamed(context, '/main');
+    print("THIS IS MY HIGHSCORE: " + score.toString());
+    return true;
   }
 
   void startGame() {

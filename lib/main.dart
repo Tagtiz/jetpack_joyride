@@ -22,6 +22,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MainMenu(),
+      routes: <String, WidgetBuilder> {
+          '/main': (BuildContext context) => new MainMenu(),
+          '/game' : (BuildContext context) => new Homepage(),
+          // '/bmi' : (BuildContext context) => new InputPage(),
+          // '/realprofile' : (BuildContext context) => new Screen4()
+        },
     );
   }
 }
