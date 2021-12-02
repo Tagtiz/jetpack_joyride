@@ -131,7 +131,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   bool collision(int c) {
-    double cx = (((bgX / 200) + 1.2) + 1).abs();
+    double cx = ((((bgX / 200) + 1.2) + coinXOffset[c]) / 2 + 1).abs();
     double cy = (gamebirdY - coinYLoc[c]).abs();
     if (sqrt(pow(cx / 3, 2) + pow(cy, 2)) < 0.2) {
       print('oh no!');
