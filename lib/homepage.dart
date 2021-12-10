@@ -38,6 +38,8 @@ class _HomepageState extends State<Homepage> {
   double laserX = 0;
   double laserY = 0;
   List<double> coinYLoc = [0.0, 0.0, 0.0, 0.0, 0.0];
+  List<double> lasYLoc = [0.0, 0.3, 0.6];
+  List<bool> lasVis = [true, true, true];
   List<double> coinXOffset = [0.0, 0.2, 0.4, 0.6, 0.8];
   List<bool> coinVis = [true, true, true, true, true];
   void setCoinPath(x) {
@@ -122,8 +124,9 @@ class _HomepageState extends State<Homepage> {
   void startGame() {
     randCoin = randomizer.nextInt(5);
     setCoinPath(randCoin);
-    laserY = coinYLoc[4];
     initialPos = gamebirdY;
+    laserY = coinYLoc[4];
+
     gamestarted = true;
     Timer.periodic(Duration(milliseconds: 50), (timer) {
       // jump();
@@ -160,14 +163,18 @@ class _HomepageState extends State<Homepage> {
               score += 1;
             }
           }
-        }
-        if (collisionLaser()) {
-          timer.cancel();
-          print('GameOver');
-          Loader.appLoader.showLoader();
-          Loader.appLoader.setText('this is custom error message');
-          setHighScore(score);
-          // Navigator.popAndPushNamed(context, '/main');
+          if (laserX / 200 + 2.4 >= -1) {
+            for (int i = 0; i < 3; i++) {
+              if (collisionLaser(i)) {
+                timer.cancel();
+                print('GameOver');
+                Loader.appLoader.showLoader();
+                Loader.appLoader.setText('');
+                setHighScore(score);
+                // Navigator.popAndPushNamed(context, '/main');
+              }
+            }
+          }
         }
       });
       print(gamebirdY);
@@ -196,9 +203,10 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
-  bool collisionLaser() {
+  bool collisionLaser(l) {
     double lx = ((((laserX / 200) + 2.4)) / 2 + 1).abs();
-    double ly = (gamebirdY - laserY).abs();
+    double ly = (gamebirdY - lasYLoc[l]).abs();
+    // double ly = (gamebirdY - laserY).abs();
     if (sqrt(pow(lx / 3, 2) + pow(ly, 2)) < 0.2) {
       print('oh no!');
       // dev.log("OHNOOOOOO");
@@ -289,7 +297,7 @@ class _HomepageState extends State<Homepage> {
                                 child: Container(
                                   width: 50,
                                   height: 50,
-                                  color: Colors.yellow,
+                                  child: Image.asset("lib/assets/Coin.png"),
                                 ),
                               )),
                           Container(
@@ -300,7 +308,7 @@ class _HomepageState extends State<Homepage> {
                               child: Container(
                                 width: 50,
                                 height: 50,
-                                color: Colors.yellow,
+                                child: Image.asset("lib/assets/Coin.png"),
                               ),
                             ),
                           ),
@@ -313,7 +321,7 @@ class _HomepageState extends State<Homepage> {
                                 child: Container(
                                   width: 50,
                                   height: 50,
-                                  color: Colors.yellow,
+                                  child: Image.asset("lib/assets/Coin.png"),
                                 ),
                               )),
                           Container(
@@ -325,7 +333,7 @@ class _HomepageState extends State<Homepage> {
                                 child: Container(
                                   width: 50,
                                   height: 50,
-                                  color: Colors.yellow,
+                                  child: Image.asset("lib/assets/Coin.png"),
                                 ),
                               )),
                           Container(
@@ -336,7 +344,7 @@ class _HomepageState extends State<Homepage> {
                               child: Container(
                                 width: 50,
                                 height: 50,
-                                color: Colors.yellow,
+                                child: Image.asset("lib/assets/Coin.png"),
                               ),
                             ),
                           ),
@@ -346,8 +354,24 @@ class _HomepageState extends State<Homepage> {
                               child: Container(
                                 width: 50,
                                 height: 150,
-                                color: Colors.red,
-                              ))
+                                child: Image.asset("lib/assets/LaserBig.png"),
+                              )),
+                          // Container(
+                          //     alignment:
+                          //         Alignment(laserX / 200 + 2.4, lasYLoc[1]),
+                          //     child: Container(
+                          //       width: 50,
+                          //       height: 50,
+                          //       child: Image.asset("lib/assets/Laser.png"),
+                          //     )),
+                          // Container(
+                          //     alignment:
+                          //         Alignment(laserX / 200 + 2.4, lasYLoc[2]),
+                          //     child: Container(
+                          //       width: 50,
+                          //       height: 50,
+                          //       child: Image.asset("lib/assets/Laser.png"),
+                          //     )),
                         ],
                       ),
                     ),
