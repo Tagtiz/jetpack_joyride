@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jetpack_joyride/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
@@ -31,30 +32,69 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text("Highscore: " + _highscore.toString()),
-          ElevatedButton(
-            onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => Homepage()),
-              // );
-              Navigator.popAndPushNamed(context, '/game');
-            },
-            child: Text("Start Game"),
+    return Material(
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Jetpack Funride",
+                style: TextStyle(
+                    color: Colors.yellow,
+                    fontSize: 56,
+                    fontWeight: FontWeight.w700),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "Highscore: " + _highscore.toString(),
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w400),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.yellow)),
+                onPressed: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => Homepage()),
+                  // );
+                  Navigator.popAndPushNamed(context, '/game');
+                },
+                child: Text(
+                  "Start Game",
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.yellow)),
+                onPressed: () {
+                  SystemChannels.platform.invokeMethod("SystemNavigator.pop");
+                },
+                child: Text(
+                  "Exit",
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text("Options"),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text("Exit"),
-          ),
-        ],
+        ),
       ),
     );
   }

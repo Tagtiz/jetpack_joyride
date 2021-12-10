@@ -5,6 +5,8 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jetpack_joyride/OverlayView.dart';
+import 'package:jetpack_joyride/loader_controller.dart';
 import 'package:jetpack_joyride/mainMenu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
@@ -162,7 +164,10 @@ class _HomepageState extends State<Homepage> {
         if (collisionLaser()) {
           timer.cancel();
           print('GameOver');
-          Navigator.popAndPushNamed(context, '/main');
+          Loader.appLoader.showLoader();
+          Loader.appLoader.setText('this is custom error message');
+          setHighScore(score);
+          // Navigator.popAndPushNamed(context, '/main');
         }
       });
       print(gamebirdY);
@@ -232,130 +237,134 @@ class _HomepageState extends State<Homepage> {
       //   print("false");
       //   isJump = false;
       // },
-      child: Container(
-        child: Scaffold(
-          body: Column(
-            children: [
-              Expanded(
-                flex: 15,
-                child: Container(
-                  // decoration: BoxDecoration(
-                  // image: DecorationImage(
-                  //     image: AssetImage("lib/assets/background.png"),
-                  //     fit: BoxFit.cover)),
-                  // color: Colors.blue,
-                  child: Center(
-                    child: Stack(
-                      children: [
-                        AnimatedPositioned(
-                          top: 0,
-                          left: bgX,
-                          // height: 600,
-                          // width: 1050,
-                          child: Image.asset("lib/assets/background.png"),
-                          duration: Duration(microseconds: 200),
-                        ),
-                        AnimatedPositioned(
-                          top: 0,
-                          left: 1050 + bgX,
-                          // height: 600,
-                          // width: 1050,
-                          child: Image.asset("lib/assets/background.png"),
-                          duration: Duration(microseconds: 200),
-                        ),
-                        Container(
-                          alignment: Alignment(-1, gamebirdY),
-                          // height: 1050, //50
-                          // width: 600, //50
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            child: Image.asset("lib/assets/flying.png"),
-                            // color: Colors.purple,
+      child: Stack(children: [
+        Container(
+          child: Scaffold(
+            body: Column(
+              children: [
+                Expanded(
+                  flex: 15,
+                  child: Container(
+                    // decoration: BoxDecoration(
+                    // image: DecorationImage(
+                    //     image: AssetImage("lib/assets/background.png"),
+                    //     fit: BoxFit.cover)),
+                    // color: Colors.blue,
+                    child: Center(
+                      child: Stack(
+                        children: [
+                          AnimatedPositioned(
+                            top: 0,
+                            left: bgX,
+                            // height: 600,
+                            // width: 1050,
+                            child: Image.asset("lib/assets/background.png"),
+                            duration: Duration(microseconds: 200),
                           ),
-                        ),
-                        Container(
-                            alignment: Alignment(
-                                bgX / 200 + 1.2 + coinXOffset[0], coinYLoc[0]),
-                            child: Visibility(
-                              visible: coinVis[0],
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                color: Colors.yellow,
-                              ),
-                            )),
-                        Container(
-                          alignment: Alignment(
-                              bgX / 200 + 1.2 + coinXOffset[1], coinYLoc[1]),
-                          child: Visibility(
-                            visible: coinVis[1],
+                          AnimatedPositioned(
+                            top: 0,
+                            left: 1050 + bgX,
+                            // height: 600,
+                            // width: 1050,
+                            child: Image.asset("lib/assets/background.png"),
+                            duration: Duration(microseconds: 200),
+                          ),
+                          Container(
+                            alignment: Alignment(-1, gamebirdY),
+                            // height: 1050, //50
+                            // width: 600, //50
                             child: Container(
                               width: 50,
                               height: 50,
-                              color: Colors.yellow,
+                              child: Image.asset("lib/assets/flying.png"),
+                              // color: Colors.purple,
                             ),
                           ),
-                        ),
-                        Container(
-                            alignment: Alignment(
-                                bgX / 200 + 1.2 + coinXOffset[2], coinYLoc[2]),
-                            child: Visibility(
-                              visible: coinVis[2],
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                color: Colors.yellow,
-                              ),
-                            )),
-                        Container(
-                            alignment: Alignment(
-                                bgX / 200 + 1.2 + coinXOffset[3], coinYLoc[3]),
-                            child: Visibility(
-                              visible: coinVis[3],
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                color: Colors.yellow,
-                              ),
-                            )),
-                        Container(
-                          alignment: Alignment(
-                              bgX / 200 + 1.2 + coinXOffset[4], coinYLoc[4]),
-                          child: Visibility(
-                            visible: coinVis[4],
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              color: Colors.yellow,
-                            ),
-                          ),
-                        ),
-                        Text(score.toString()),
-                        Container(
-                            alignment: Alignment(laserX / 200 + 2.4, laserY),
-                            child: Visibility(
-                                visible: coinVis[4],
+                          Container(
+                              alignment: Alignment(
+                                  bgX / 200 + 1.2 + coinXOffset[0],
+                                  coinYLoc[0]),
+                              child: Visibility(
+                                visible: coinVis[0],
                                 child: Container(
                                   width: 50,
-                                  height: 150,
-                                  color: Colors.red,
-                                )))
-                      ],
+                                  height: 50,
+                                  color: Colors.yellow,
+                                ),
+                              )),
+                          Container(
+                            alignment: Alignment(
+                                bgX / 200 + 1.2 + coinXOffset[1], coinYLoc[1]),
+                            child: Visibility(
+                              visible: coinVis[1],
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                color: Colors.yellow,
+                              ),
+                            ),
+                          ),
+                          Container(
+                              alignment: Alignment(
+                                  bgX / 200 + 1.2 + coinXOffset[2],
+                                  coinYLoc[2]),
+                              child: Visibility(
+                                visible: coinVis[2],
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  color: Colors.yellow,
+                                ),
+                              )),
+                          Container(
+                              alignment: Alignment(
+                                  bgX / 200 + 1.2 + coinXOffset[3],
+                                  coinYLoc[3]),
+                              child: Visibility(
+                                visible: coinVis[3],
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  color: Colors.yellow,
+                                ),
+                              )),
+                          Container(
+                            alignment: Alignment(
+                                bgX / 200 + 1.2 + coinXOffset[4], coinYLoc[4]),
+                            child: Visibility(
+                              visible: coinVis[4],
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                color: Colors.yellow,
+                              ),
+                            ),
+                          ),
+                          Text(score.toString()),
+                          Container(
+                              alignment: Alignment(laserX / 200 + 2.4, laserY),
+                              child: Container(
+                                width: 50,
+                                height: 150,
+                                color: Colors.red,
+                              ))
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  color: Colors.grey,
-                ),
-              )
-            ],
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    color: Colors.grey,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-      ),
+        OverlayView(),
+      ]),
     );
   }
 }
