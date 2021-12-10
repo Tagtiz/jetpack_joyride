@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jetpack_joyride/mainMenu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -32,6 +33,8 @@ class _HomepageState extends State<Homepage> {
   bool gamestarted = false;
   int startYCoin = 0;
   int halfYCoin = 0;
+  double laserX = 0;
+  double laserY = 0;
   List<double> coinYLoc = [0.0, 0.0, 0.0, 0.0, 0.0];
   List<double> coinXOffset = [0.0, 0.2, 0.4, 0.6, 0.8];
   List<bool> coinVis = [true, true, true, true, true];
@@ -117,6 +120,7 @@ class _HomepageState extends State<Homepage> {
   void startGame() {
     randCoin = randomizer.nextInt(5);
     setCoinPath(randCoin);
+    laserY = coinYLoc[4];
     initialPos = gamebirdY;
     gamestarted = true;
     Timer.periodic(Duration(milliseconds: 50), (timer) {
@@ -135,6 +139,10 @@ class _HomepageState extends State<Homepage> {
         } else {
           bgX -= 5;
         }
+        if (laserX <= -1050) {
+          laserX = 0;
+        } else
+          laserX -= 5;
         if (initialPos - height < -1) {
           initialPos = -1;
           height = 0;
@@ -151,6 +159,11 @@ class _HomepageState extends State<Homepage> {
             }
           }
         }
+        if (collisionLaser()) {
+          timer.cancel();
+          print('GameOver');
+          Navigator.popAndPushNamed(context, '/main');
+        }
       });
       print(gamebirdY);
       // if (gamebirdY < -5 || gamebirdY > 10) {
@@ -165,15 +178,32 @@ class _HomepageState extends State<Homepage> {
     double cx = ((((bgX / 200) + 1.2) + coinXOffset[c]) / 2 + 1).abs();
     double cy = (gamebirdY - coinYLoc[c]).abs();
     if (sqrt(pow(cx / 3, 2) + pow(cy, 2)) < 0.2) {
-      print('oh no!');
+      // print('oh no!');
       // dev.log("OHNOOOOOO");
       // print(sqrt(pow(cx, 2) + pow(cy, 2)));
-      print(cx.toString() + " " + cy.toString());
+      // print(cx.toString() + " " + cy.toString());
+      return true;
+    } else {
+      // print('oh yes');
+      // print(sqrt(pow(cx, 2) + pow(cy, 2)));
+      // print(cx.toString() + " " + cy.toString());
+      return false;
+    }
+  }
+
+  bool collisionLaser() {
+    double lx = ((((laserX / 200) + 2.4)) / 2 + 1).abs();
+    double ly = (gamebirdY - laserY).abs();
+    if (sqrt(pow(lx / 3, 2) + pow(ly, 2)) < 0.2) {
+      print('oh no!');
+      // dev.log("OHNOOOOOO");
+      // print(sqrt(pow(lx, 2) + pow(ly, 2)));
+      print(lx.toString() + " " + ly.toString());
       return true;
     } else {
       print('oh yes');
-      // print(sqrt(pow(cx, 2) + pow(cy, 2)));
-      print(cx.toString() + " " + cy.toString());
+      // print(sqrt(pow(lx, 2) + pow(ly, 2)));
+      print(lx.toString() + " " + ly.toString());
       return false;
     }
   }
@@ -301,7 +331,16 @@ class _HomepageState extends State<Homepage> {
                             ),
                           ),
                         ),
-                        Text(score.toString())
+                        Text(score.toString()),
+                        Container(
+                            alignment: Alignment(laserX / 200 + 2.4, laserY),
+                            child: Visibility(
+                                visible: coinVis[4],
+                                child: Container(
+                                  width: 50,
+                                  height: 150,
+                                  color: Colors.red,
+                                )))
                       ],
                     ),
                   ),
